@@ -35,11 +35,10 @@ namespace FamousPeopleGallery.Infrastructure.Mappers
                 CreationTime = photoModel.CreationTime,
                 Name = photoModel.Name,
                 ProfileId = photoModel.ProfileId,
-                Profile = photoModel.Profile.ToOrmProfile(),
                 FileName = photoModel.FileName,
                 AlbumId = photoModel.AlbumId,
                 Likes = photoModel.Likes.Select(l => l.ToOrmLike()).ToList()
             };
         }
-    }
+    }   
 }

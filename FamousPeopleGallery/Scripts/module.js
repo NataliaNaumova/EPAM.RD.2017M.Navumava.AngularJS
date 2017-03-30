@@ -37,7 +37,7 @@
     .controller('galleryController',
     [
         '$scope', '$http', 'dataCenter', '$rootScope',
-        function ($scope, $http, dataCenter, $rootScope) {
+        function($scope, $http, dataCenter, $rootScope) {
             $scope.albums = [];
 
             dataCenter.getAlbumNames().then(function(response) {
@@ -48,12 +48,12 @@
             });
 
             $scope.changeAlbum = function() {
-                dataCenter.getAlbum($scope.currentAlbum.Id).then(function (response) {
+                dataCenter.getAlbum($scope.currentAlbum.Id).then(function(response) {
 
                     if ($rootScope.userId != null) {
-                        angular.forEach(response.data, function (value, key) {
+                        angular.forEach(response.data, function(value, key) {
                             value.hasLike = false;
-                            angular.forEach(value.Likes, function (likeValue, key) {
+                            angular.forEach(value.Likes, function(likeValue, key) {
                                 if (likeValue.ProfileId == $rootScope.userId)
                                     value.hasLike = true;
                             });
@@ -64,13 +64,13 @@
                 });
             };
 
-            $scope.setLike = function (image) {
+            $scope.setLike = function(image) {
                 $http.post(
                     '/Like/Like',
                     {
                         photoId: image.Id
                     }).then(
-                    function (response) {
+                    function(response) {
                         image.Likes = response.data;
                         image.hasLike = !image.hasLike;
                     });
@@ -84,10 +84,10 @@
         }
     ])
     .controller('addImageController', [
-        '$scope', 'dataCenter', '$http', function ($scope, dataCenter, $http) {
+        '$scope', 'dataCenter', '$http', ' $location', function($scope, dataCenter, $http, $location) {
             $scope.albums = [];
 
-            dataCenter.getAlbumNames().then(function (response) {
+            dataCenter.getAlbumNames().then(function(response) {
                 response.data.splice(0, 1);
                 $scope.albums = response.data;
                 $scope.currentAlbum = $scope.albums[0];
@@ -111,15 +111,14 @@
                     '/Photo/Add',
                     {
                         name: photo.name,
-                        file: photo.file,
+                        data: $scope.imageToAdd,
                         albumId: currentAlbum.Id
                     }).then(
                     function(response) {
-                        if (response.data.success) {
-                            $location.path('/');
+                        if (response.data) {
+                            $location.path('/Angular/gallery');
                         } else {
                             $scope.serverResponseError = true;
-                            $scope.serverResponseErrorMessage = response.data.message;
                         }
                     },
                     function(response) {
@@ -234,14 +233,14 @@
                     '/Photo/GetAllPhotos'
                 );
 
-               return response;
+                return response;
             };
 
             function getAlbum(selectedAlbumId) {
                 var url = '/Photo/GetAlbumPhotos' + '/' + selectedAlbumId;
                 var response = $http.get(url);
 
-              return response;
+                return response;
             };
 
             function getAlbumNames() {
@@ -259,21 +258,19 @@
             };
         }
     ])
-
-
     .directive('pwCheck', function() {
         return {
             require: 'ngModel',
             scope: {
                 confirmPassword: '=pwCheck'
             },
-            link: function (scope, element, attributes, ngModel) {
+            link: function(scope, element, attributes, ngModel) {
 
-                ngModel.$validators.pwCheck = function (password) {
+                ngModel.$validators.pwCheck = function(password) {
                     return password === scope.confirmPassword;
                 };
 
-                scope.$watch('confirmPassword', function () {
+                scope.$watch('confirmPassword', function() {
                     ngModel.$validate();
                 });
             }

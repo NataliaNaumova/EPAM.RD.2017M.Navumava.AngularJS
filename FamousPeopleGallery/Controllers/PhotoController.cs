@@ -16,37 +16,43 @@ namespace FamousPeopleGallery.Controllers
         private EntityModel db = new EntityModel();
         private static readonly string photoStoragePath = "~/Content/photos/";
 
-        public JsonResult Add(string name, string file)
+        public JsonResult Add(string name, string data, int albumId)
         {
-            var dataIndex = file.IndexOf("base64", StringComparison.Ordinal) + 7;
-            var cleareData = file.Substring(dataIndex);
+            var dataIndex = data.IndexOf("base64", StringComparison.Ordinal) + 7;
+            var cleareData = data.Substring(dataIndex);
             var fileData = Convert.FromBase64String(cleareData);
             var bytes = fileData.ToArray();
 
-            var path = GetPathToImg(name);
+            int startIndex = data.IndexOf(':') + 1;
+            int length = data.IndexOf(';') - startIndex;
+            var fullFormat = data.Substring(startIndex, length);
+            var format = fullFormat.Substring(fullFormat.IndexOf("/") + 1);
+
+            var path = GetPathToImg(name, format);
             using (var fileStream = System.IO.File.Create(path))
             {
                 fileStream.Write(bytes, 0, bytes.Length);
-                fileStream.Close();
             }
 
             var photo = new PhotoModel
             {
-                FileName = path,
+                FileName = name + "." + format,
                 CreationTime = DateTime.Now.ToUniversalTime(),
                 Name = name,
-
+                ProfileId = Int32.Parse(Session["user_id"].ToString()),
+                AlbumId = albumId
             };
 
             db.Set<Photo>().Add(photo.ToOrmPhoto());
+            db.SaveChanges();
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetPathToImg(string fileName)
+        private string GetPathToImg(string fileName, string format)
         {
             var serverPath = Server.MapPath("~");
-            return Path.Combine(serverPath, "Content", "img", fileName);
+            return Path.Combine(serverPath, "Content", "photos", fileName) + "." + format;
         }
 
         public JsonResult GetAllPhotos()

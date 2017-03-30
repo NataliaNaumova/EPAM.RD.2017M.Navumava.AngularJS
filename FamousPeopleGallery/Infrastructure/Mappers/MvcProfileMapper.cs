@@ -23,8 +23,7 @@ namespace FamousPeopleGallery.Infrastructure.Mappers
             {
                 Id = profileModel.Id,
                 FirstName = profileModel.FirstName,
-                LastName = profileModel.LastName,
-                User = profileModel.User.ToOrmUser()
+                LastName = profileModel.LastName
             };
         }
     }
