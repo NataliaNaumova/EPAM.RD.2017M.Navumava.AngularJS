@@ -1,0 +1,43 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h1>{{currentAlbum.Name}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <select ng-change="changeAlbum()"
+                    ng-model="currentAlbum"
+                    ng-options="album.Name for album in albums"
+                    class="form-control input-sm"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div ng-repeat="image in currentAlbum.Images" class="col-md-4">
+            <div class="panel photo-panel text-center well">
+                <div class="panel-heading">{{image.Name}}</div>
+                <div class="panel-body">
+                    <div style="width: 300px; height: 300px;">
+                        <img alt="Photo" ng-src="{{image.FileName}}" class="photo-block" />
+                    </div>
+                    <br/>
+                    <p>
+                        {{image.CreationTime.slice(6,-2) | date:"MM/dd/yyyy 'at' h:mma"}}
+                    </p>
+                </div>
+                <div class="photo-panel panel-footer">
+                    <p>
+                        Photo by 
+                           <i>{{image.Profile.User.Login}}</i>
+                    </p>
+                    <hr/>
+                    <div >
+                        <button type="submit" ng-click="setLike(image)" class="btn btn-sm" ng-class="{'btn-danger': image.hasLike == true, 'btn-default' : image.hasLike == false}">
+                            <span class="glyphicon glyphicon-heart">&nbsp;{{image.Likes.length}}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

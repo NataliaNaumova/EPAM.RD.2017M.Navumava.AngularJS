@@ -1,0 +1,53 @@
+﻿<div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="page-header text-center">
+            <h4>Add photo</h4>
+        </div>
+        <form name="addImageForm" class="form-horizontal" novalidate>
+            <div class="alert alert-danger alert-dismissable fade in" ng-show="serverResponseError">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>
+                    Error!
+                </strong>
+                <span class="text-danger">{{serverResponseErrorMessage}}</span>
+            </div>
+            
+            <div class="form-group">
+                <input name="photo" ng-model="photo.name" class="form-control" placeholder="Name"
+                       required />
+                <span class="text-danger" ng-show="addImageForm.photo.$dirty && addImageForm.photo.$error.required">The field can't be empty.</span>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-3">Choose album:</label>
+                <div class="col-sm-5">
+                    <select ng-model="currentAlbum"
+                            ng-options="album.Name for album in albums"
+                            class="form-control input-sm">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">Choose photo:</label>
+                <div class="col-sm-5">
+                    <input type="file" name="file" ng-model="photo.file" onchange="angular.element(this).scope().imageUpload(event)" />
+                </div>
+            </div>
+
+            <div>
+                <img class="thumb" ng-src="{{imageToAdd}}" />
+            </div>
+
+            <br/>
+            <div class="form-group">
+                <div class="text-center">
+                    <input type="submit" class="btn btn-default" value="Upload" ng-click="addImage(photo, currentAlbum)" ng-disabled="loginForm.$invalid" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-3"></div>
+</div>

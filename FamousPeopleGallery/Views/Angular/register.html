@@ -1,0 +1,68 @@
+﻿<div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="page-header text-center">
+            <h4>Registration</h4>
+        </div>
+        <form name="registrationForm" class="form-horizontal" novalidate>
+            <div class="alert alert-danger alert-dismissable fade in" ng-show="serverResponseError">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>
+                    Error!
+                </strong>
+                <span class="text-danger">{{serverResponseErrorMessage}}</span>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input name="email" ng-model="user.email" class="form-control" placeholder="Email" type="email"
+                           required ng-pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/"/>
+                </div>
+                <span class="text-danger" ng-show="registrationForm.email.$dirty && registrationForm.email.$error.required">The field can't be empty.</span>
+                <span class="text-danger" ng-show="registrationForm.email.$dirty && registrationForm.email.$error.pattern">Email is invalid.</span>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="login" ng-model="user.login" class="form-control" placeholder="Login"
+                           required ng-pattern="/^[a-zA-Z][a-zA-Z0-9_]+$/" ng-maxlength="40" ng-minlength="3"/>
+                </div>
+                <span class="text-danger" ng-show="registrationForm.login.$dirty && registrationForm.login.$error.required">The field can't be empty.</span>
+                <span class="text-danger" ng-show="registrationForm.login.$dirty && registrationForm.login.$error.pattern">Login is invalid.</span>
+                <span class="text-danger" ng-show="registrationForm.login.$dirty && registrationForm.login.$error.minlength">Login must contain at least 3 characters.</span>
+                <span class="text-danger" ng-show="registrationForm.login.$dirty && registrationForm.login.$error.maxlength">Login must contain not more than 40 characters.</span>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                    <input name="password" ng-model="user.password" class="form-control" placeholder="Password" type="password"
+                           required ng-maxlength="50" ng-minlength="6"/>
+                </div>
+                <span class="text-danger" ng-show="registrationForm.password.$dirty && registrationForm.password.$error.required">The field can't be empty.</span>
+                <span class="text-danger" ng-show="registrationForm.password.$dirty && registrationForm.password.$error.minlength">Password must contain at least 6 characters.</span>
+                <span class="text-danger" ng-show="registrationForm.password.$dirty && registrationForm.password.$error.maxlength">Password must contain not more than 50 characters.</span>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-ok"></i></span>
+                    <input name="confirmPassword" ng-model="user.confirmPassword" class="form-control" placeholder="Confirm Password" type="password"
+                           required pw-check="user.password"/>
+                </div>
+                <span class="text-danger" ng-show="registrationForm.confirmPassword.$dirty && registrationForm.confirmPassword.$error.required">The field can't be empty.</span>
+                <span class="text-danger" ng-show="registrationForm.confirmPassword.$dirty && registrationForm.confirmPassword.$error.pwCheck">Passwords are not the same.</span>
+            </div>
+
+            <br/>
+            <div class="form-group">
+                <div class="text-center">
+                    <input type="submit" class="btn btn-default" value="Sign up" ng-click="register(user)" ng-disabled="registrationForm.$invalid"/>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-3"></div>
+</div>
